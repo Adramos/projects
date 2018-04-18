@@ -7,6 +7,7 @@ This file contains the game's logic.
 
 */
 #include <iostream>
+#include "Game.h"
 
 int main() {
 	std::cout << "\nTest";
