@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "Player.h"
+#include <ctime>
 
 class Game {
 private:
@@ -16,8 +17,12 @@ public:
 	void addPlayer(Player* player, bool first);
 	bool isFinishedA();
 	bool isFinishedB();
+	bool isFinishedT();
 	char getGameStatus() { return this->gameStatus; }
 	void changeGameStatue(char change) { this->gameStatus = change; }
+	void startGame();
+	std::string getBoard();
+	std::string makeMove(char playerID, int row, int column);
 };
 
 #endif 

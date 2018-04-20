@@ -50,3 +50,65 @@ bool Game::isFinishedB() {
 
 	return false;
 }
+
+bool Game::isFinishedT() {
+	for (int i = 0; i < 3; i++) 
+		for (int j = 0; j < 3; j++)
+			if (this->gameBoard[i][j] == '.')
+				return false;
+
+	return true;
+}
+
+void Game::startGame() {
+	this->clearBoard();
+	srand(time(NULL));
+	if (rand() % 2 == 0)
+		this->reversedPlayers = false;
+	else
+		this->reversedPlayers = true;
+}
+
+std::string Game::getBoard() {
+	std::string returnString = "{\"response\" : \"game status\", \"board\" : [";
+	for (int i = 0; i < 3; i++) {
+		returnString += "\"";
+		for (int j = 0; j < 3; j++) {
+			returnString = returnString + this->gameBoard[i][j];
+		}
+		returnString += "\"";
+		if (i < 2)
+			returnString += ", ";
+	}
+
+	returnString += "]}";
+	return returnString;
+}
+
+std::string Game::makeMove(char playerID, int row, int column) {
+	std::string returnString = "{\"response\" : ";
+	if (row < 0 || row > 2 || column < 0 || column > 2)
+		returnString += "\"error\", \"error_code\" : 3}";	
+	else if (this->gameBoard[row][column] != '.') 
+		returnString += "\"error\", \"error_code\" : 4}";
+	else {
+		this->gameBoard[row][column] = playerID;
+		if (playerID == 'A') {
+			if (this->isFinishedA()) 
+				returnString += "\"game over\", \"details\" : \"A won\"}";			
+			else if(this->isFinishedT())
+				returnString += "\"game over\", \"details\" : \"undecided\"}";
+			else
+				returnString += "\"ok\"";
+		}
+		else {
+			if (this->isFinishedA())
+				returnString += "\"game over\", \"details\" : \"B won\"}";
+			else if (this->isFinishedT())
+				returnString += "\"game over\", \"details\" : \"undecided\"}";
+			else
+				returnString += "\"ok\"";
+		}		
+	}
+	return returnString;
+}

@@ -1,13 +1,12 @@
 /*
 Author:		Pawe³ Jurczyk
-Version:	0.1
-Date:		18.04.2018
 
 This file contains the game's logic. 
 
 */
 
 #include "Connection.h"
+#include <memory>
 
 
 
@@ -28,6 +27,8 @@ int main() {
 		std::cin >> testowy;
 	}
 */
+	std::ofstream file_id;
+	file_id.open("file.json");
 	std::ifstream ifs("test.json");
 	Json::Reader reader;
 	Json::Value obj;
@@ -42,6 +43,21 @@ int main() {
 		std::cout << " chapter: " << characters[i]["chapter"].asUInt();
 		std::cout << std::endl;
 	}
+	std::cin >> testowy;
+
+	std::string strJson = "{\"response\" : \"error\", \"error_code\" : 1}";
+		//"{\"mykey\" : \"myvalue\"}";
+	reader.parse(strJson.c_str(), obj);
+	Json::StreamWriterBuilder fastWriter;
+	//Json::StyledStreamWriter styledWriter;
+
+	
+
+	
+	fastWriter["commentStyle"] = "None";
+	fastWriter["indentation"] = "   ";  // or whatever you like
+	std::unique_ptr<Json::StreamWriter> writer(fastWriter.newStreamWriter());
+	writer->write(obj, &file_id);
 	std::cin >> testowy;
 		/*
 	std::cin >> obj;

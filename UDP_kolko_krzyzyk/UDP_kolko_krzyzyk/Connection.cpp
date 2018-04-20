@@ -10,7 +10,7 @@ void Connection::searchForPlayers() {
 	char data[100];					//maximum lenght of message is more or less 75 signs, but to be sure we'll use 100 signs' table				
 	Json::Reader reader;
 	Json::StreamWriterBuilder fastWriter;
-	Json::Value value;
+	Json::Value value, returnMessage;
 	std::string jsonString;
 	sf::IpAddress firstSender(firstIPAdress), secoundSender(secoundIPAdress);
 	unsigned short firstP = firstPort, secoundP = secoundPort;
@@ -23,6 +23,12 @@ void Connection::searchForPlayers() {
 			if (socket.receive(data, 100, received, firstSender, firstP) != sf::Socket::Done) {
 				std::cout << "\nError, couldn't recived message form A.";
 				//sending error message
+				jsonString = "{\"response\" : \"error\", \"error_code\" : 0}";
+				strcpy_s(data, jsonString.c_str());
+				if (socket.send(data, 100, firstSender, firstP) != sf::Socket::Done)
+				{
+					std::cout << "\nCan't send message!";
+				}
 			}
 			else {
 				jsonString = data;
@@ -35,7 +41,13 @@ void Connection::searchForPlayers() {
 					else
 						currentGame->changeGameStatue('w');
 					firstOK = true;
-					//sending good message
+					//sending confirm message
+					jsonString = "{\"response\" : \"confirm\"}";
+					strcpy_s(data, jsonString.c_str());
+					if (socket.send(data, 100, firstSender, firstP) != sf::Socket::Done)
+					{
+						std::cout << "\nCan't send message!";
+					}
 				}
 			}
 			socket.unbind();
@@ -46,6 +58,12 @@ void Connection::searchForPlayers() {
 			if (socket.receive(data, 100, received, secoundSender, secoundP) != sf::Socket::Done) {
 				std::cout << "\nError, couldn't recived message from B.";
 				//sending error message
+				jsonString = "{\"response\" : \"error\", \"error_code\" : 0}";
+				strcpy_s(data, jsonString.c_str());
+				if (socket.send(data, 100, secoundSender, secoundP) != sf::Socket::Done)
+				{
+					std::cout << "\nCan't send message!";
+				}
 			}
 			else {
 				jsonString = data;
@@ -58,7 +76,13 @@ void Connection::searchForPlayers() {
 					else
 						currentGame->changeGameStatue('w');
 					secoundOK = true;
-					//sending good message
+					//sending confirm message
+					jsonString = "{\"response\" : \"confirm\"}";
+					strcpy_s(data, jsonString.c_str());
+					if (socket.send(data, 100, secoundSender, secoundP) != sf::Socket::Done)
+					{
+						std::cout << "\nCan't send message!";
+					}
 				}
 			}
 		}
