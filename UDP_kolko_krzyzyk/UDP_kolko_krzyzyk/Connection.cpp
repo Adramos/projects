@@ -1,15 +1,19 @@
 #include "Connection.h"
 
-Connection::Connection(int portAdress) {
+Connection::Connection() {
 	currentGame = new Game();
-	PORT = portAdress;
+	PORT = portNumber;
+}
+
+Connection::~Connection() {
+	delete this->currentGame;
 }
 
 void Connection::searchForPlayers() {
 	
 	char data[100];					//maximum lenght of message is more or less 75 signs, but to be sure we'll use 100 signs' table				
 	Json::Reader reader;
-	Json::StreamWriterBuilder fastWriter;
+	//Json::StreamWriterBuilder fastWriter;
 	Json::Value value, returnMessage;
 	std::string jsonString;
 	sf::IpAddress firstSender(firstIPAdress), secoundSender(secoundIPAdress);
@@ -85,6 +89,35 @@ void Connection::searchForPlayers() {
 					}
 				}
 			}
+			socket.unbind();
 		}
 	}
+}
+
+void Connection::sendMessage(Player* toWho, std::string message) {
+	char data[100];
+	sf::IpAddress ip(toWho->getIP());
+	strcpy_s(data, message.c_str());
+	if (socket.send(data, 100, ip, toWho->getPort()) != sf::Socket::Done)
+	{
+		std::cout << "\nCan't send message!";
+	}
+
+}
+
+std::string Connection::reciveMessage(Player* fromWho) {
+	char data[100];
+	std::string messageString;
+	std::size_t received;
+	unsigned short port = fromWho->getPort();
+
+	socket.bind(portNumber);	
+	sf::IpAddress ip(fromWho->getIP());
+	if (socket.receive(data, 100, received, ip, port) != sf::Socket::Done) {		
+		std::cout << "\nCan't recive message!";
+		socket.unbind();
+		return "";
+	}
+	socket.unbind();
+	return messageString;
 }

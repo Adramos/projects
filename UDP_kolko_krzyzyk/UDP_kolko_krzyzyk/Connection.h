@@ -29,8 +29,12 @@ private:
 	int PORT;
 	sf::UdpSocket socket;
 public:
-	Connection(int portAdress);
+	Connection();
+	~Connection();
 	void searchForPlayers();
+	void sendMessage(Player* toWho, std::string message);
+	std::string reciveMessage(Player* fromWho);
+	Game* getCurrentGame() { return this->currentGame; }
 };
 
 #endif

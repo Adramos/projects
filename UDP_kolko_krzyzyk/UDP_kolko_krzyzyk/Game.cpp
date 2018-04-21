@@ -14,11 +14,16 @@ Game::Game() {
 	
 }
 
+Game::~Game() {
+	delete this->playerOne;
+	delete this->playerTwo;
+}
+
 void Game::addPlayer(Player* player, bool first) {
 	if (first)
 		playerOne = player;
 	else
-		PlayerTwo = player;
+		playerTwo = player;
 }
 
 bool Game::isFinishedA() {
@@ -111,4 +116,11 @@ std::string Game::makeMove(char playerID, int row, int column) {
 		}		
 	}
 	return returnString;
+}
+
+Player* Game::getPlayer(char who) {
+	if (who == 'A')
+		return this->playerOne;
+	else
+		return this->playerTwo;
 }
