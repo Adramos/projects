@@ -23,9 +23,11 @@ void Connection::searchForPlayers() {
 
 	while (currentGame->getGameStatus() != 'w') {
 		if (firstOK == false) {
+			socket.unbind();
 			socket.bind(portNumber);
 			if (socket.receive(data, 100, received, firstSender, firstP) != sf::Socket::Done) {
 				std::cout << "\nError, couldn't recived message form A.";
+				//socket.unbind();
 				//sending error message
 				jsonString = "{\"response\" : \"error\", \"error_code\" : 0}";
 				strcpy_s(data, jsonString.c_str());
@@ -35,6 +37,7 @@ void Connection::searchForPlayers() {
 				}
 			}
 			else {
+				//socket.unbind();
 				jsonString = data;
 				reader.parse(jsonString.c_str(), value);
 				if (value["request"].asString() == "connection") {
@@ -53,14 +56,24 @@ void Connection::searchForPlayers() {
 						std::cout << "\nCan't send message!";
 					}
 				}
+				else {
+					jsonString = "{\"response\" : \"error\", \"error_code\" : 1}";
+					strcpy_s(data, jsonString.c_str());
+					if (socket.send(data, 100, firstSender, firstP) != sf::Socket::Done)
+					{
+						std::cout << "\nCan't send message!";
+					}
+				}
 			}
-			socket.unbind();
+			
 		}
 
 		if (secoundOK == false) {
+			socket.unbind();
 			socket.bind(portNumber);
 			if (socket.receive(data, 100, received, secoundSender, secoundP) != sf::Socket::Done) {
 				std::cout << "\nError, couldn't recived message from B.";
+				//socket.unbind();
 				//sending error message
 				jsonString = "{\"response\" : \"error\", \"error_code\" : 0}";
 				strcpy_s(data, jsonString.c_str());
@@ -70,6 +83,7 @@ void Connection::searchForPlayers() {
 				}
 			}
 			else {
+				//socket.unbind();
 				jsonString = data;
 				reader.parse(jsonString.c_str(), value);
 				if (value["request"].asString() == "connection") {
@@ -88,8 +102,15 @@ void Connection::searchForPlayers() {
 						std::cout << "\nCan't send message!";
 					}
 				}
+				else {
+					jsonString = "{\"response\" : \"error\", \"error_code\" : 1}";
+					strcpy_s(data, jsonString.c_str());
+					if (socket.send(data, 100, secoundSender, secoundP) != sf::Socket::Done)
+					{
+						std::cout << "\nCan't send message!";
+					}
+				}
 			}
-			socket.unbind();
 		}
 	}
 }
@@ -111,13 +132,15 @@ std::string Connection::reciveMessage(Player* fromWho) {
 	std::size_t received;
 	unsigned short port = fromWho->getPort();
 
+	socket.unbind();
 	socket.bind(portNumber);	
 	sf::IpAddress ip(fromWho->getIP());
 	if (socket.receive(data, 100, received, ip, port) != sf::Socket::Done) {		
 		std::cout << "\nCan't recive message!";
-		socket.unbind();
+		//socket.unbind();
 		return "";
 	}
-	socket.unbind();
+	//socket.unbind();
+	messageString = data;
 	return messageString;
 }

@@ -107,7 +107,7 @@ std::string Game::makeMove(char playerID, int row, int column) {
 				returnString += "\"ok\"";
 		}
 		else {
-			if (this->isFinishedA())
+			if (this->isFinishedB())
 				returnString += "\"game over\", \"details\" : \"B won\"}";
 			else if (this->isFinishedT())
 				returnString += "\"game over\", \"details\" : \"undecided\"}";

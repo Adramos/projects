@@ -11,7 +11,7 @@
 #define firstIPAdress	"127.0.0.1"	//IP adress of first player -						modify only here
 #define firstPort		55889		//port of first player -							modify only here
 #define secoundIPAdress "127.0.0.1"	//IP adress of secound player -						modify only here
-#define secoundPort		558890		//port of secound player -							modify only here
+#define secoundPort		55890		//port of secound player -							modify only here
 
 /*
 How the data is send between clients and server:
