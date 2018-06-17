@@ -12,21 +12,24 @@ Zaslepka* Genetics::getAfterCrossing() {
 Genetics::~Genetics() {
 
 	Zaslepka* ElementOfList = nullptr, *nextElement;
-	ElementOfList = this->beforeCrosingList;
-	while (ElementOfList->nast != nullptr) {
-		nextElement = ElementOfList->nast;
+	if (beforeCrosingList != nullptr) {
+		ElementOfList = this->beforeCrosingList;
+		while (ElementOfList->nast != nullptr) {
+			nextElement = ElementOfList->nast;
+			delete ElementOfList;
+			ElementOfList = nextElement;
+		}
 		delete ElementOfList;
-		ElementOfList = nextElement;
 	}
-	delete ElementOfList;
-
-	ElementOfList = this->afterCrosingList;
-	while (ElementOfList->nast != nullptr) {
-		nextElement = ElementOfList->nast;
+	if (afterCrosingList != nullptr) {
+		ElementOfList = this->afterCrosingList;
+		while (ElementOfList->nast != nullptr) {
+			nextElement = ElementOfList->nast;
+			delete ElementOfList;
+			ElementOfList = nextElement;
+		}
 		delete ElementOfList;
-		ElementOfList = nextElement;
 	}
-	delete ElementOfList;
 
 }
 
@@ -157,5 +160,142 @@ void Genetics::updateBestAlgoritms() {
 	if (zar > this->bestSum->getZarobek()) {
 		delete this->bestSum;
 		this->bestSum = new Zaslepka(*helpIterator);
+	}
+}
+
+Zaslepka* Genetics::crossSingleAlgoritm(Zaslepka* first, Zaslepka* secound, int chanseToMutate) {		//returns two-member LIST of algoritms (not single valuse!)
+	srand(time(NULL));
+	int howManyParts = 2 + (rand() % 5);
+	int startingPoint, endPoint, pointHolder, jBeg, jEnd, kBeg, kEnd, jMut, kMut, valueMut;
+	Zaslepka* newAlgoritmFirst = new Zaslepka(*first);
+	Zaslepka* newAlgoritmSecound = new Zaslepka(*secound);
+	for (int i = 0; i < howManyParts; i++) {
+		startingPoint = rand() % 349;
+		endPoint = rand() % 349;
+		while (startingPoint == endPoint)
+			endPoint = rand() % 349;
+		if (endPoint < startingPoint) {
+			pointHolder = endPoint;
+			endPoint = startingPoint;
+			startingPoint = pointHolder;
+		}
+		jBeg = jEnd = kBeg = kEnd = 0;								//j <0-9>, k <0-34> -> here
+		while (startingPoint - 35 >= 0) {							//Algoritm -> [j][i] -> i <0-9>, j <0-34>
+			jBeg++;													// i == j
+			startingPoint = startingPoint - 35;						// j == k
+		}															//methode(i,j,...) = methode(j,k,...)
+		kBeg = startingPoint;
+		while (endPoint - 35 >= 0) {
+			jEnd++;
+			endPoint = endPoint - 35;
+		}
+		kEnd = endPoint;
+		if (i == 0) {
+			for (int j = jBeg; j <= jEnd; j++) {
+				if (j == jBeg && j == jEnd) {
+					for (int k = kBeg; k <= kEnd; k++) {
+						newAlgoritmFirst->setGenotypeValue(j, k, secound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, first->getGenotypeValue(j, k));						
+					}
+				}
+				else if (j == jBeg && j != jEnd) {
+					for (int k = kBeg; k < 10; k++) {
+						newAlgoritmFirst->setGenotypeValue(j, k, secound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, first->getGenotypeValue(j, k));
+					}
+				}
+				else if (j == jEnd) {
+					for (int k = 0; k <= kEnd; k++) {
+						newAlgoritmFirst->setGenotypeValue(j, k, secound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, first->getGenotypeValue(j, k));
+					}
+				}
+				else {
+					for (int k = 0; k < 10; k++) {
+						newAlgoritmFirst->setGenotypeValue(j, k, secound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, first->getGenotypeValue(j, k));
+					}
+				}
+
+			}
+		}
+		else {
+			for (int j = jBeg; j <= jEnd; j++) {
+				if (j == jBeg && j == jEnd) {
+					for (int k = kBeg; k <= kEnd; k++) {
+						pointHolder = newAlgoritmFirst->getGenotypeValue(j, k);
+						newAlgoritmFirst->setGenotypeValue(j, k, newAlgoritmSecound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, pointHolder);
+					}
+				}
+				else if (j == jBeg && j != jEnd) {
+					for (int k = kBeg; k < 10; k++) {
+						pointHolder = newAlgoritmFirst->getGenotypeValue(j, k);
+						newAlgoritmFirst->setGenotypeValue(j, k, newAlgoritmSecound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, pointHolder);
+					}
+				}
+				else if (j == jEnd) {
+					for (int k = 0; k <= kEnd; k++) {
+						pointHolder = newAlgoritmFirst->getGenotypeValue(j, k);
+						newAlgoritmFirst->setGenotypeValue(j, k, newAlgoritmSecound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, pointHolder);
+					}
+				}
+				else {
+					for (int k = 0; k < 10; k++) {
+						pointHolder = newAlgoritmFirst->getGenotypeValue(j, k);
+						newAlgoritmFirst->setGenotypeValue(j, k, newAlgoritmSecound->getGenotypeValue(j, k));
+						newAlgoritmSecound->setGenotypeValue(j, k, pointHolder);
+					}
+				}
+
+			}
+		}
+	}
+
+	//mutating
+	if (chanseToMutate >= rand() % 100) {
+		jMut = rand() % 10;
+		kMut = rand() % 35;
+		valueMut = rand() % numberOfAlgoritsm;
+		newAlgoritmFirst->setGenotypeValue(jMut, kMut, valueMut);
+		newAlgoritmSecound->setGenotypeValue(jMut, kMut, valueMut);
+	}
+
+	newAlgoritmFirst->nast = newAlgoritmSecound;
+	return newAlgoritmFirst;
+}
+
+
+void Genetics::crossAllAlgoritms(int mutationChance) {	//it removes basic values from "afterCrossingList" -> replace them with new algoritms	
+	Zaslepka* listHolder = afterCrosingList;
+	afterCrosingList = nullptr;
+	Zaslepka* algoritmIterator = listHolder;
+	Zaslepka* algoritmHolder = listHolder->nast;
+	Zaslepka* lastAfterCrossingElement = nullptr;
+	bool first = true;
+
+	while (algoritmIterator->nast != nullptr) {
+		while (algoritmHolder != nullptr) {
+			if (first) {
+				afterCrosingList = crossSingleAlgoritm(algoritmIterator, algoritmHolder, mutationChance);
+				lastAfterCrossingElement = afterCrosingList->nast;
+			}
+			else {
+				lastAfterCrossingElement->nast = crossSingleAlgoritm(algoritmIterator, algoritmHolder, mutationChance);
+				lastAfterCrossingElement = lastAfterCrossingElement->nast->nast;
+			}
+			algoritmHolder = algoritmHolder->nast;
+		}
+		algoritmIterator = algoritmIterator->nast;
+		algoritmHolder = algoritmIterator->nast;
+	}
+	algoritmIterator = listHolder;
+	listHolder = nullptr;
+	while (algoritmIterator != nullptr) {
+		algoritmHolder = algoritmIterator;
+		algoritmIterator = algoritmIterator->nast;
+		delete algoritmHolder;
 	}
 }

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <time.h>
 
+#define numberOfAlgoritsm	10;
+
 class Genetics {
 private:
 	//std::list<Zaslepka> beforeCrosingList;
@@ -14,16 +16,17 @@ private:
 	Zaslepka* afterCrosingList;
 	Zaslepka* bestVictory;
 	Zaslepka* bestSum;
-
+	Zaslepka* getBestAlgoritm(char kindMark);
+	void updateBestAlgoritms();
 public:
 	Genetics(Zaslepka* beforeCrossing);
-	Zaslepka* getAfterCrossing();
-	Zaslepka* getBestAlgoritm(char kindMark);
+	Zaslepka* getAfterCrossing();	
 	void getBestAlgoritmsList();
 	~Genetics();
 	Zaslepka* getBestVictory();
 	Zaslepka* getBestSum();
-	void updateBestAlgoritms();
+	void crossAllAlgoritms(int mutationChance);
+	Zaslepka* crossSingleAlgoritm(Zaslepka* first, Zaslepka* secound, int chanceToMutate);	//chanseTomutate <0-100>
 };
 
 #endif 

@@ -110,11 +110,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Algoritms.cpp" />
     <ClCompile Include="Genetics.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Zaslepka.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Algoritms.h" />
     <ClInclude Include="Genetics.h" />
     <ClInclude Include="Zaslepka.h" />
   </ItemGroup>
