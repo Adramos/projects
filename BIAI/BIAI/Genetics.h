@@ -2,7 +2,7 @@
 #define Genetics_h
 
 //#include <list>
-#include "Zaslepka.h"
+#include "Organism.h"
 #include <iostream>
 #include <time.h>
 
@@ -10,23 +10,23 @@
 
 class Genetics {
 private:
-	//std::list<Zaslepka> beforeCrosingList;
-	//std::list<Zaslepka> afterCrosingList;
-	Zaslepka* beforeCrosingList;
-	Zaslepka* afterCrosingList;
-	Zaslepka* bestVictory;
-	Zaslepka* bestSum;
-	Zaslepka* getBestAlgoritm(char kindMark);
+	//std::list<Organism> beforeCrosingList;
+	//std::list<Organism> afterCrosingList;
+	Organism* beforeCrosingList;
+	Organism* afterCrosingList;
+	Organism* bestVictory;
+	Organism* bestSum;
+	Organism* getBestAlgoritm(char kindMark);
 	void updateBestAlgoritms();
 public:
-	Genetics(Zaslepka* beforeCrossing);
-	Zaslepka* getAfterCrossing();	
+	Genetics(Organism* beforeCrossing);
+	Organism* getAfterCrossing();	
 	void getBestAlgoritmsList();
 	~Genetics();
-	Zaslepka* getBestVictory();
-	Zaslepka* getBestSum();
+	Organism* getBestVictory();
+	Organism* getBestSum();
 	void crossAllAlgoritms(int mutationChance);
-	Zaslepka* crossSingleAlgoritm(Zaslepka* first, Zaslepka* secound, int chanceToMutate);	//chanseTomutate <0-100>
+	Organism* crossSingleAlgoritm(Organism* first, Organism* secound, int chanceToMutate);	//chanseTomutate <0-100>
 };
 
 #endif 

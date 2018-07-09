@@ -21,10 +21,10 @@
     <ClCompile Include="Genetics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Zaslepka.cpp">
+    <ClCompile Include="Algoritms.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Algoritms.cpp">
+    <ClCompile Include="Organism.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClInclude Include="Genetics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Zaslepka.h">
+    <ClInclude Include="Algoritms.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Algoritms.h">
+    <ClInclude Include="Organism.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

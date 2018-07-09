@@ -1,17 +1,17 @@
 #include "Genetics.h"
 
-Genetics::Genetics(Zaslepka* beforeCrossing){
+Genetics::Genetics(Organism* beforeCrossing){
 	this->beforeCrosingList = beforeCrossing,
 	this->afterCrosingList = nullptr;
 }
 
-Zaslepka* Genetics::getAfterCrossing() {
+Organism* Genetics::getAfterCrossing() {
 	return this->afterCrosingList;
 }
 
 Genetics::~Genetics() {
 
-	Zaslepka* ElementOfList = nullptr, *nextElement;
+	Organism* ElementOfList = nullptr, *nextElement;
 	if (beforeCrosingList != nullptr) {
 		ElementOfList = this->beforeCrosingList;
 		while (ElementOfList->nast != nullptr) {
@@ -33,8 +33,8 @@ Genetics::~Genetics() {
 
 }
 
-Zaslepka* Genetics::getBestAlgoritm(char kindMark) {
-	Zaslepka* bestAlgoritm = nullptr, *iterator;
+Organism* Genetics::getBestAlgoritm(char kindMark) {
+	Organism* bestAlgoritm = nullptr, *iterator;
 	int numberOfElements = 0;
 	int highestSum = this->beforeCrosingList->getZarobek();
 	float hightestVictories = -1;	//minimal equals 0, so it'll be lower then any of elements
@@ -118,7 +118,7 @@ Zaslepka* Genetics::getBestAlgoritm(char kindMark) {
 }
 
 void Genetics::getBestAlgoritmsList() {
-	Zaslepka* lastElement;
+	Organism* lastElement;
 	//victories > sum > random
 	afterCrosingList = this->getBestAlgoritm('w');
 	lastElement = afterCrosingList;
@@ -135,19 +135,19 @@ void Genetics::getBestAlgoritmsList() {
 	this->updateBestAlgoritms();
 }
 
-Zaslepka* Genetics::getBestVictory() {
+Organism* Genetics::getBestVictory() {
 	return this->bestVictory;
 }
-Zaslepka* Genetics::getBestSum() {
+Organism* Genetics::getBestSum() {
 	return this->bestSum;
 }
 
 void Genetics::updateBestAlgoritms() {
-	Zaslepka* iterator = afterCrosingList, *helpIterator = nullptr;
+	Organism* iterator = afterCrosingList, *helpIterator = nullptr;
 	int zar = iterator->getZarobek();
 	if (this->bestVictory->getWygrane() < iterator->getWygrane()) {
 		delete this->bestVictory;
-		this->bestVictory = new Zaslepka(*iterator);
+		this->bestVictory = new Organism(*iterator);
 	}
 	iterator = iterator->nast;
 	for (int i = 0; i < 5; i++) {
@@ -159,16 +159,16 @@ void Genetics::updateBestAlgoritms() {
 	}
 	if (zar > this->bestSum->getZarobek()) {
 		delete this->bestSum;
-		this->bestSum = new Zaslepka(*helpIterator);
+		this->bestSum = new Organism(*helpIterator);
 	}
 }
 
-Zaslepka* Genetics::crossSingleAlgoritm(Zaslepka* first, Zaslepka* secound, int chanseToMutate) {		//returns two-member LIST of algoritms (not single valuse!)
+Organism* Genetics::crossSingleAlgoritm(Organism* first, Organism* secound, int chanseToMutate) {		//returns two-member LIST of algoritms (not single valuse!)
 	srand(time(NULL));
 	int howManyParts = 2 + (rand() % 5);
 	int startingPoint, endPoint, pointHolder, jBeg, jEnd, kBeg, kEnd, jMut, kMut, valueMut;
-	Zaslepka* newAlgoritmFirst = new Zaslepka(*first);
-	Zaslepka* newAlgoritmSecound = new Zaslepka(*secound);
+	Organism* newAlgoritmFirst = new Organism(*first);
+	Organism* newAlgoritmSecound = new Organism(*secound);
 	for (int i = 0; i < howManyParts; i++) {
 		startingPoint = rand() % 349;
 		endPoint = rand() % 349;
@@ -269,11 +269,11 @@ Zaslepka* Genetics::crossSingleAlgoritm(Zaslepka* first, Zaslepka* secound, int 
 
 
 void Genetics::crossAllAlgoritms(int mutationChance) {	//it removes basic values from "afterCrossingList" -> replace them with new algoritms	
-	Zaslepka* listHolder = afterCrosingList;
+	Organism* listHolder = afterCrosingList;
 	afterCrosingList = nullptr;
-	Zaslepka* algoritmIterator = listHolder;
-	Zaslepka* algoritmHolder = listHolder->nast;
-	Zaslepka* lastAfterCrossingElement = nullptr;
+	Organism* algoritmIterator = listHolder;
+	Organism* algoritmHolder = listHolder->nast;
+	Organism* lastAfterCrossingElement = nullptr;
 	bool first = true;
 
 	while (algoritmIterator->nast != nullptr) {

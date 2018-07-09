@@ -1,11 +1,13 @@
 #ifndef Algoritms_h
 #define Algoritms_h
+#include <vector>
 
 class Algoritms {
 private:
 	int row;
 	int column;
 	int decksNumber;
+	std::vector<int> player, dealer, graveyard;		//TODO after joining: replace <int> with <Card> and rewrite methode "countTrueValue"
 	//cards on board
 	//carts in graveyard
 public:
@@ -13,8 +15,8 @@ public:
 	int countTrueValue();
 
 	//game algoritms
-	int strategicCard();
-	int countingCards();
+	int strategicCard(bool twoCards);
+	int countingCards(bool twoCards);
 	//algorytm w³asny
 
 
@@ -38,8 +40,8 @@ insurance	// 5 //
 
 
 HELP
-	 r	20	19	18	17	16	15	14	13	12	11	10	9	8	7	6	5`	A-10	A-9		A-8		A-7		A-6		A-5		A-4		A-3		A-2		A-A		10-10		9-9		8-8		7-7		6-6	`	5-5		4-4		3-3		2-2
- c
+	 c	20	19	18	17	16	15	14	13	12	11	10	9	8	7	6	5	A-10	A-9		A-8		A-7		A-6		A-5		A-4		A-3		A-2		A-A		10-10		9-9		8-8		7-7		6-6	`	5-5		4-4		3-3		2-2
+ r
 2		ST	ST	ST	ST	ST	ST	ST	ST	H	D	D	H	H	H	H	H	ST		ST		ST		ST		H		H		H		H		H		SP		ST			SP		SP		SP		SP		D		H		SP		SP
 3		ST	ST	ST	ST	ST	ST	ST	ST	H	D	D	D	H	H	H	H	ST		ST		ST		D		D		H		H		H		H		SP		ST			SP		SP		SP		SP		D		H		SP		SP
 4		ST	ST	ST	ST	ST	ST	ST	ST	ST	D	D	D	H	H	H	H	ST		ST		ST		D		D		D		D		H		H		SP		ST			SP		SP		SP		SP		D		H		SP		SP
